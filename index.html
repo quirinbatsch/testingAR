@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quirin's AR Session with QR Code Target</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web XR AR Session</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markerjs"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
   <body>
-    <a-scene embedded arjs>
-      <a-marker type="barcode" value="https://example.com">
-        <a-box position="0 0.5 0" material="color: red;"></a-box>
-      </a-marker>
-      <a-entity camera></a-entity>
+    <a-scene embedded arjs="sourceType: webcam;">
+      <a-box position="0 0.5 0" material="color: red;"></a-box>
+      <a-camera-static></a-camera-static>
     </a-scene>
   </body>
 </html>

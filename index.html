@@ -7,12 +7,11 @@
   </head>
   <body>
     <a-scene embedded arjs="sourceType: webcam;">
-      <a-assets>
-        <a-mixin id="pinkGlossy" material="metalness: 0.9; roughness: 0.1; color: #FFC0CB;"></a-mixin>
-      </a-assets>
       <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/jeromeetienne/AR.js/master/three.js/examples/marker-training/examples/pattern-files/pattern-hiro.patt">
         <a-marker-camera position="0 0 0" rotation="0 180 0"></a-marker-camera>
-        <a-entity gltf-model="https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf" rotation="0 180 0" scale="0.001 0.001 0.001" mixin="pinkGlossy"></a-entity>
+        <a-entity gltf-model="https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf" rotation="0 180 0" scale="0.001 0.001 0.001">
+          <a-entity material="color: #ff69b4; metalness: 0.9; roughness: 0.1;"></a-entity>
+        </a-entity>
       </a-marker>
       <a-camera-static></a-camera-static>
     </a-scene>

@@ -1,90 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>GIF AR Page</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<script src="https://cdn.rawgit.com/google-ar/three.ar.js/master/build/three.ar.js"></script>
+	<meta charset="UTF-8">
+	<title>Floor AR Example</title>
+	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-free/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-free/ar.js"></script>
 	<style>
-		canvas {
+		#arjs-canvas {
+			width: 100%;
+			height: 100%;
 			position: absolute;
 			top: 0;
 			left: 0;
-			height: 100%;
-			width: 100%;
+			z-index: -1;
 		}
 	</style>
 </head>
 <body>
-	<h1>Welcome to QUIRIN GIF AR page!</h1>
-	<p>Check out this awesome GIF in AR:</p>
+	<canvas id="arjs-canvas"></canvas>
 	<script>
-		// create the three.js scene
-		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		var renderer = new THREE.WebGLRenderer({ alpha: true });
-		renderer.setPixelRatio(window.devicePixelRatio);
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		document.body.appendChild(renderer.domElement);
+		const canvas = document.getElementById('arjs-canvas');
 
-		// create the AR light
-		var light = new THREE.AmbientLight(0xffffff, 1);
+		const renderer = new THREE.WebGLRenderer({
+			canvas: canvas,
+			antialias: true,
+			alpha: true
+		});
+		renderer.setClearColor(new THREE.Color('lightgrey'), 0);
+		renderer.setSize(canvas.width, canvas.height);
+
+		const scene = new THREE.Scene();
+
+		const camera = new THREE.Camera();
+		scene.add(camera);
+
+		const light = new THREE.AmbientLight(0xffffff);
 		scene.add(light);
 
-		// create the AR object
-		var object = null;
-		var loader = new THREE.GLTFLoader();
-		loader.load('https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.glb', function (gltf) {
-			object = gltf.scene;
-			scene.add(object);
+		const controls = new THREE.DeviceOrientationControls(camera);
+
+		// floor plane
+		const floorGeometry = new THREE.PlaneBufferGeometry(20, 20);
+		const floorMaterial = new THREE.MeshBasicMaterial({ color: 'gray' });
+		const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+		floor.rotation.x = -Math.PI / 2;
+		scene.add(floor);
+
+		const arToolkitSource = new THREEx.ArToolkitSource({
+			sourceType: 'webcam',
+			displayWidth: 640,
+			displayHeight: 480
 		});
 
-		// create the AR session
-		var xrSession = null;
-		var xrButton = document.createElement('button');
-		xrButton.textContent = 'Enter AR';
-		xrButton.addEventListener('click', function () {
-			if (!xrSession) {
-				navigator.xr.requestDevice('AR', { requiredFeatures: ['hit-test'] })
-					.then(function (device) {
-						return device.requestSession({ requiredFeatures: ['hit-test'] });
-					})
-					.then(function (session) {
-						xrSession = session;
-						xrButton.textContent = 'Exit AR';
-						xrSession.addEventListener('end', function () {
-							xrSession = null;
-							xrButton.textContent = 'Enter AR';
-						});
-						renderer.xr.setSession(xrSession);
-					})
-					.catch(function (error) {
-						console.error(error);
-					});
-			} else {
-				xrSession.end();
-			}
+		arToolkitSource.init(() => {
+			setTimeout(() => {
+				onResize();
+			}, 2000);
 		});
-		document.body.appendChild(xrButton);
 
-		// handle hit test results
-		function handleHitTestResults(results) {
-			if (results.length > 0) {
-				var hitPose = results[0].getPose(scene.children[0]);
-				if (hitPose) {
-					object.visible = true;
-					object.position.set(hitPose.transform.position.x, hitPose.transform.position.y, hitPose.transform.position.z);
-					object.quaternion.set(hitPose.transform.orientation.x, hitPose.transform.orientation.y, hitPose.transform.orientation.z, hitPose.transform.orientation.w);
-				}
-			} else {
-				object.visible = false;
+		window.addEventListener('resize', onResize);
+
+		function onResize() {
+			arToolkitSource.onResizeElement();
+			arToolkitSource.copyElementSizeTo(renderer.domElement);
+			if (arToolkitContext.arController !== null) {
+				arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
 			}
 		}
 
-		// start the render loop
+		const arToolkitContext = new THREEx.ArToolkitContext({
+			debug: false,
+			cameraParametersUrl: 'https://raw.githubusercontent.com/nicolocarpignoli/AR.js-boilerplate/master/camera_para.dat',
+			detectionMode: 'mono'
+		});
+
+		arToolkitContext.init(() => {
+			camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+		});
+
+		const arMarkerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+			type: 'pattern',
+			patternUrl: 'https://raw.githubusercontent.com/nicolocarpignoli/AR.js-boilerplate/master/patterns/floor.patt',
+			changeMatrixMode: 'cameraTransformMatrix'
+		});
+
 		function render() {
-			if (xrSession) {
-				var xrFrame = renderer.xr.getFramebuffer();
-				var xrViewport = xrSession.renderState.baseLayer.getViewport(xrFrame.views[0]);
-				camera.projectionMatrix.fromArray(xrFrame.views[0].projectionMatrix);
-				renderer.setSize(xrViewport.width, xrViewport.height);
-				xrSession.requestHit
+			requestAnimationFrame(render);
+			if (arToolkitSource.ready === false) {
+				return;
+			}
+
+			arToolkitContext.update(arToolkitSource.domElement);
+
+			controls.update();
+
+			renderer.render(scene, camera);
+		}
+
+		requestAnimationFrame(render);
+	</script>
+</body>
+</html>

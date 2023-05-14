@@ -2,72 +2,89 @@
 <html>
 <head>
 	<title>GIF AR Page</title>
-	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-based/three.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-based/ar.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<script src="https://cdn.rawgit.com/google-ar/three.ar.js/master/build/three.ar.js"></script>
 	<style>
-		#arjs-canvas {
+		canvas {
 			position: absolute;
 			top: 0;
 			left: 0;
+			height: 100%;
+			width: 100%;
 		}
 	</style>
 </head>
 <body>
-	<h1>This is qbs GIF AR page!</h1>
-	<p>Check out this cool GIF in AR:</p>
-	<canvas id="arjs-canvas"></canvas>
+	<h1>Welcome to QUIRIN GIF AR page!</h1>
+	<p>Check out this awesome GIF in AR:</p>
 	<script>
-		// create the AR.js scene
+		// create the three.js scene
 		var scene = new THREE.Scene();
-		var camera = new THREE.Camera();
-		scene.add(camera);
-		var renderer = new THREE.WebGLRenderer({
-			canvas: document.getElementById("arjs-canvas"),
-			alpha: true,
-			antialias: true,
-		});
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		var renderer = new THREE.WebGLRenderer({ alpha: true });
+		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
 
-		// create the AR.js marker
-		var marker = new THREE.Group();
-		marker.add(new THREE.Mesh(
-			new THREE.PlaneBufferGeometry(1, 1, 1),
-			new THREE.MeshBasicMaterial({ color: 0xffffff })
-		));
-		scene.add(marker);
+		// create the AR light
+		var light = new THREE.AmbientLight(0xffffff, 1);
+		scene.add(light);
 
-		// load the GIF as a texture
-		var textureLoader = new THREE.TextureLoader();
-		textureLoader.load(
-			"https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.gif",
-			function (texture) {
-				var geometry = new THREE.PlaneBufferGeometry(1, 1, 1);
-				var material = new THREE.MeshBasicMaterial({ map: texture });
-				var mesh = new THREE.Mesh(geometry, material);
-				marker.add(mesh);
-			},
-			undefined,
-			function (error) {
-				console.error(error);
-			}
-		);
-
-		// listen for the "loaded" event on the ARjs object
-		window.addEventListener('loaded', function () {
-			// request access to the camera
-			ARjs.getUserMedia({ video: {} }, function () {
-				console.log('Camera access granted');
-			}, function (error) {
-				console.error('Camera access denied', error);
-			});
+		// create the AR object
+		var object = null;
+		var loader = new THREE.GLTFLoader();
+		loader.load('https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.glb', function (gltf) {
+			object = gltf.scene;
+			scene.add(object);
 		});
 
-		// render the AR.js scene
-		function animate() {
-			requestAnimationFrame(animate);
-			renderer.render(scene, camera);
+		// create the AR session
+		var xrSession = null;
+		var xrButton = document.createElement('button');
+		xrButton.textContent = 'Enter AR';
+		xrButton.addEventListener('click', function () {
+			if (!xrSession) {
+				navigator.xr.requestDevice('AR', { requiredFeatures: ['hit-test'] })
+					.then(function (device) {
+						return device.requestSession({ requiredFeatures: ['hit-test'] });
+					})
+					.then(function (session) {
+						xrSession = session;
+						xrButton.textContent = 'Exit AR';
+						xrSession.addEventListener('end', function () {
+							xrSession = null;
+							xrButton.textContent = 'Enter AR';
+						});
+						renderer.xr.setSession(xrSession);
+					})
+					.catch(function (error) {
+						console.error(error);
+					});
+			} else {
+				xrSession.end();
+			}
+		});
+		document.body.appendChild(xrButton);
+
+		// handle hit test results
+		function handleHitTestResults(results) {
+			if (results.length > 0) {
+				var hitPose = results[0].getPose(scene.children[0]);
+				if (hitPose) {
+					object.visible = true;
+					object.position.set(hitPose.transform.position.x, hitPose.transform.position.y, hitPose.transform.position.z);
+					object.quaternion.set(hitPose.transform.orientation.x, hitPose.transform.orientation.y, hitPose.transform.orientation.z, hitPose.transform.orientation.w);
+				}
+			} else {
+				object.visible = false;
+			}
 		}
-		animate();
-	</script>
-</body>
-</html>
+
+		// start the render loop
+		function render() {
+			if (xrSession) {
+				var xrFrame = renderer.xr.getFramebuffer();
+				var xrViewport = xrSession.renderState.baseLayer.getViewport(xrFrame.views[0]);
+				camera.projectionMatrix.fromArray(xrFrame.views[0].projectionMatrix);
+				renderer.setSize(xrViewport.width, xrViewport.height);
+				xrSession.requestHit

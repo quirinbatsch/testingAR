@@ -73,8 +73,8 @@ loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/reticle/re
 })
 
 let flower;
-loader.load("https://www.design-capsule.magnane.com/static/piet_chair.a22a1d2b.glb", function(glb) {
-  flower = glb.scene;
+loader.load("https://github.com/KhronosGroup/glTF-Sample-Models/blob/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb", function(gltf) {
+  flower = gltf.scene;
 });
 
 session.addEventListener("select", (event) => {

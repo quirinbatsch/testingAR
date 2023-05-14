@@ -13,7 +13,7 @@
 	</style>
 </head>
 <body>
-	<h1>Quirin's GIF AR page!</h1>
+	<h1>This is qbs GIF AR page!</h1>
 	<p>Check out this cool GIF in AR:</p>
 	<canvas id="arjs-canvas"></canvas>
 	<script>
@@ -39,7 +39,7 @@
 		// load the GIF as a texture
 		var textureLoader = new THREE.TextureLoader();
 		textureLoader.load(
-			"hello-world.gif",
+			"https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.gif",
 			function (texture) {
 				var geometry = new THREE.PlaneBufferGeometry(1, 1, 1);
 				var material = new THREE.MeshBasicMaterial({ map: texture });
@@ -51,6 +51,16 @@
 				console.error(error);
 			}
 		);
+
+		// listen for the "loaded" event on the ARjs object
+		window.addEventListener('loaded', function () {
+			// request access to the camera
+			ARjs.getUserMedia({ video: {} }, function () {
+				console.log('Camera access granted');
+			}, function (error) {
+				console.error('Camera access denied', error);
+			});
+		});
 
 		// render the AR.js scene
 		function animate() {

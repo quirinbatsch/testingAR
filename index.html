@@ -13,7 +13,7 @@
 	</style>
 </head>
 <body>
-	<h1>Welcome to my GIF AR page!</h1>
+	<h1>Quirin's GIF AR page!</h1>
 	<p>Check out this cool GIF in AR:</p>
 	<canvas id="arjs-canvas"></canvas>
 	<script>
@@ -39,7 +39,7 @@
 		// load the GIF as a texture
 		var textureLoader = new THREE.TextureLoader();
 		textureLoader.load(
-			"https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.gif",
+			"hello-world.gif",
 			function (texture) {
 				var geometry = new THREE.PlaneBufferGeometry(1, 1, 1);
 				var material = new THREE.MeshBasicMaterial({ map: texture });

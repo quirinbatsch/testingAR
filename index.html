@@ -26,7 +26,7 @@ async function activateXR() {
   // To be continued in upcoming steps.
   const scene = new THREE.Scene();
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
 directionalLight.position.set(10, 15, 10);
 scene.add(directionalLight);
   
@@ -73,7 +73,7 @@ loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/reticle/re
 })
 
 let flower;
-loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
+loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   flower = gltf.scene;
 });
 

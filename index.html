@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GIF AR Page</title>
+	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-based/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@mediaman/ar.js@2.0.0-dev.4/build/marker-based/ar.js"></script>
+	<style>
+		#arjs-canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	</style>
+</head>
+<body>
+	<h1>Welcome to my GIF AR page!</h1>
+	<p>Check out this cool GIF in AR:</p>
+	<canvas id="arjs-canvas"></canvas>
+	<script>
+		// create the AR.js scene
+		var scene = new THREE.Scene();
+		var camera = new THREE.Camera();
+		scene.add(camera);
+		var renderer = new THREE.WebGLRenderer({
+			canvas: document.getElementById("arjs-canvas"),
+			alpha: true,
+			antialias: true,
+		});
+		renderer.setSize(window.innerWidth, window.innerHeight);
+
+		// create the AR.js marker
+		var marker = new THREE.Group();
+		marker.add(new THREE.Mesh(
+			new THREE.PlaneBufferGeometry(1, 1, 1),
+			new THREE.MeshBasicMaterial({ color: 0xffffff })
+		));
+		scene.add(marker);
+
+		// load the GIF as a texture
+		var textureLoader = new THREE.TextureLoader();
+		textureLoader.load(
+			"https://media.tenor.com/cI3eAVLXj48AAAAC/hello-world.gif",
+			function (texture) {
+				var geometry = new THREE.PlaneBufferGeometry(1, 1, 1);
+				var material = new THREE.MeshBasicMaterial({ map: texture });
+				var mesh = new THREE.Mesh(geometry, material);
+				marker.add(mesh);
+			},
+			undefined,
+			function (error) {
+				console.error(error);
+			}
+		);
+
+		// render the AR.js scene
+		function animate() {
+			requestAnimationFrame(animate);
+			renderer.render(scene, camera);
+		}
+		animate();
+	</script>
+</body>
+</html>

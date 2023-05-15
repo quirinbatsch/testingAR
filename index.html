@@ -79,6 +79,8 @@ const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   pinkbear = gltf.scene;
+  pinkbear.position.set(0, 0, -1);
+  pinkbear.size.set(0.1, 0.1, 0.1);
  // pinkbear.visible = false;
   scene.add(pinkbear);
  })  

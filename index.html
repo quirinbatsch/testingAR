@@ -21,6 +21,7 @@ async function activateXR() {
   const canvas = document.createElement("canvas");
   document.body.appendChild(canvas);
   const gl = canvas.getContext("webgl", {xrCompatible: true});
+  
 
   // To be continued in upcoming steps.
  /*   const scene = new THREE.Scene();
@@ -41,7 +42,7 @@ cube.position.set(0, 0, -1);
 scene.add(cube);
 */
   
- const scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
 directionalLight.position.set(10, 15, 10);
@@ -77,7 +78,7 @@ const referenceSpace = await session.requestReferenceSpace('local');
   
   
 // Create a container object
-const container = new THREE.Object3D();
+//const container = new THREE.Object3D();
   
 const loader = new THREE.GLTFLoader();
 let pinkbear;
@@ -95,7 +96,24 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
   scene.add(container);
 */
   scene.add(pinkbear);
-})
+});
+  
+const loader = new THREE.GLTFLoader();
+let pinkbear;
+loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function (gltf) {
+  const pinkbear = gltf.scene;
+
+  // Iterate over materials and change color
+  pinkbear.traverse((child) => {
+    if (child.isMesh) {
+      const material = child.material;
+      material.color.set(0xff0000); // set material color to red
+    }
+  });
+
+  scene.add(pinkbear);
+});
+
   
   /*
   

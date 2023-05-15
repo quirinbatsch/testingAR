@@ -82,10 +82,10 @@ const referenceSpace = await session.requestReferenceSpace('local');
   
 const loader = new THREE.GLTFLoader();
 let pinkbear;
-loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
+loader.load("https://github.com/quirinbatsch/testingAR/blob/main/CesiumMan.gltf", function(gltf) {
   pinkbear = gltf.scene;
    // Iterate over materials and change color
-  scene.scale.set(0.1, 0.1, 0.1)
+  //scene.scale.set(0.1, 0.1, 0.1)
   pinkbear.traverse((child) => {
     if (child.isMesh) {
       const material = child.material;

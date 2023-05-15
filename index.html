@@ -84,9 +84,7 @@ const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   pinkbear = gltf.scene;
-  pinkbear.scale.set(0.01, 0.01, 0.01);
-  pinkbear.position.set(0, 0, -1);
-  
+    
   /*
   // Add the glTF model as a child of the container
     container.add(gltf.scene);
@@ -97,11 +95,14 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
 */
   scene.add(pinkbear);
 });
-  
+
+  /*
 const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function (gltf) {
   const pinkbear = gltf.scene;
+  pinkbear.scale.set(0.01, 0.01, 0.01);
+  pinkbear.position.set(0, 0, -1);
 
   // Iterate over materials and change color
   pinkbear.traverse((child) => {
@@ -113,7 +114,7 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
 
   scene.add(pinkbear);
 });
-
+*/
   
   /*
   

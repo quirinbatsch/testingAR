@@ -82,7 +82,7 @@ const referenceSpace = await session.requestReferenceSpace('local');
   
 const loader = new THREE.GLTFLoader();
 let pinkbear;
-loader.load("https://github.com/quirinbatsch/testingAR/blob/main/pinkbear-test.glb", function(gltf) {
+loader.load("https://github.com/quirinbatsch/testingAR/blob/main/pinkbearfromfbx.gltf", function(gltf) {
   pinkbear = gltf.scene;
 //  pinkbear.scale.set(0.1*pinkbear.scale.x, 0.1*pinkbear.scale.y, 0.1*pinkbear.scale.z)
   //pinkbear.scale.set(0.5, 0.5, 0.5);
@@ -92,8 +92,8 @@ loader.load("https://github.com/quirinbatsch/testingAR/blob/main/pinkbear-test.g
   pinkbear.traverse((child) => {
     if (child.isMesh) {
       const material = child.material;
-     // material.color.set(0xFFFF00); // set material color to yellow
-      material.color.set(0xFF0000); // set material color to red
+      material.color.set(0xFFFF00); // set material color to yellow
+     //material.color.set(0xFF0000); // set material color to red
      // material.color.set(0x0000FF); // set material color to blue
     }
   });

@@ -120,6 +120,7 @@ function placeFlower() {
     clone.position.copy(reticle.position);
     scene.add(clone);
     session.removeEventListener("select", placeFlower);
+    reticle.visible = false;
   }
 }
 

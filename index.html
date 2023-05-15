@@ -84,14 +84,14 @@ const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/CesiumMan.gltf", function(gltf) {
   pinkbear = gltf.scene;
-  pinkbear.scale.set(0.1, 0.1, 0.1);
+  pinkbear.scale.set(1, 1, 1);
   pinkbear.position.set(0, 0, -1);
    // Iterate over materials and change color
   //scene.scale.set(0.1, 0.1, 0.1)
   pinkbear.traverse((child) => {
     if (child.isMesh) {
       const material = child.material;
-      material.color.set(0xFF0094); // set material color to red
+      material.color.set(0xFFFF00); // set material color to red
     }
   });
     

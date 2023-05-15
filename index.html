@@ -73,12 +73,27 @@ session.updateRenderState({
 // A 'local' reference space has a native origin that is located
 // near the viewer's position at the time the session was created.
 const referenceSpace = await session.requestReferenceSpace('local');
+
   
+  
+// Create a container object
+const container = new THREE.Object3D();
   
 const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   pinkbear = gltf.scene;
+  // Add the glTF model as a child of the container
+    container.add(gltf.scene);
+    container.position.set(0, 0, -5);
+    container.scale.set(0.1, 0.1, 0.1);
+  // Add the container to the scene
+  scene.add(container);
+
+});
+  
+  /*
+  
   position = (0, 0, -1);
   scale = (0.1, 0.1, 0.1);
  // pinkbear.position.set(0, 0, -1);
@@ -86,6 +101,8 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
  // pinkbear.visible = false;
   scene.add(pinkbear);
  })  
+ 
+ */
 
 // Create a render loop that allows us to draw on the AR view.
 const onXRFrame = (time, frame) => {

@@ -113,19 +113,23 @@ session.addEventListener("select", (event) => {
 loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
   flower = gltf.scene;
 });
+  
+session.addEventListener("select", placeFlower);
 
 function placeFlower() {
   if (flower) {
     const clone = flower.clone();
     clone.position.copy(reticle.position);
     scene.add(clone);
-    reticle.visible = false;
     session.removeEventListener("select", placeFlower);
+    reticle.visible = false;
     hitTestSource.cancel();
   }
 }
 
-session.addEventListener("select", placeFlower);
+//session.addEventListener("select", placeFlower);
+ 
+
   
   /*
   

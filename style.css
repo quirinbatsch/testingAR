@@ -1,13 +1,21 @@
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set the height of the container to the full height of the viewport */
+}
+
 .xr-button {
   background-color: #335168; /* cello */
   border: none;
   color: pink;
-  padding: 25px 50px;
+  padding: 30px 50px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   transition: background-color 0.3s ease;
@@ -16,3 +24,8 @@
 .xr-button:hover {
   background-color: #3e8e41; /* Dark green */
 }
+</style>
+
+<div class="container">
+  <button class="xr-button">Click me</button>
+</div>

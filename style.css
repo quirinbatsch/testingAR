@@ -1,12 +1,12 @@
 .xr-button {
-  background-color: #4CAF50; /* Green */
+  background-color: #335168; /* cello */
   border: none;
-  color: white;
-  padding: 10px 20px;
+  color: pink;
+  padding: 25px 50px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 20px;
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);

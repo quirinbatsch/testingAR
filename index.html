@@ -83,9 +83,8 @@ const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   pinkbear = gltf.scene;
-  
-  gltf.scene.scale.set(0.1, 0.1, 0.1);
-  gltf.scene.position.set(0, 0, -1);
+  pinkbear.scale.set(0.01, 0.01, 0.01);
+  pinkbear.position.set(0, 0, -1);
   
   /*
   // Add the glTF model as a child of the container

@@ -85,7 +85,7 @@ let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear.gltf", function(gltf) {
   pinkbear = gltf.scene;
    // Iterate over materials and change color
-  pinkbear.scale.set(0.1,0.1,0.1)
+  scene.scale.set(0.1, 0.1, 0.1)
   pinkbear.traverse((child) => {
     if (child.isMesh) {
       const material = child.material;

@@ -82,6 +82,51 @@ const hitTestSource = await session.requestHitTestSource({ space: viewerSpace })
 
   
   
+  const loader = new THREE.GLTFLoader();
+let reticle;
+loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/reticle/reticle.gltf", function(gltf) {
+  reticle = gltf.scene;
+  reticle.visible = false;
+  scene.add(reticle);
+})
+
+  
+  /* original code:
+let flower;
+loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
+  flower = gltf.scene;
+});
+
+session.addEventListener("select", (event) => {
+  if (flower) {
+    const clone = flower.clone();
+    clone.position.copy(reticle.position);
+    scene.add(clone);
+  }
+});
+
+  */
+  
+  //chatGPT code:
+  
+  let flower;
+loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
+  flower = gltf.scene;
+});
+
+function placeFlower() {
+  if (flower) {
+    const clone = flower.clone();
+    clone.position.copy(reticle.position);
+    scene.add(clone);
+    session.removeEventListener("select", placeFlower);
+  }
+}
+
+session.addEventListener("select", placeFlower);
+  
+  /*
+  
   
 const loader = new THREE.GLTFLoader();
 let pinkbear;
@@ -106,6 +151,7 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
   scene.add(pinkbear);
 });
 
+*/
   
 // Create a render loop that allows us to draw on the AR view.
 const onXRFrame = (time, frame) => {
@@ -131,11 +177,11 @@ const onXRFrame = (time, frame) => {
     camera.updateMatrixWorld(true);
 
 const hitTestResults = frame.getHitTestResults(hitTestSource);
-if (hitTestResults.length > 0 && pinkbear) {
+if (hitTestResults.length > 0 && reticle) {
   const hitPose = hitTestResults[0].getPose(referenceSpace);
-  pinkbear.visible = true;
-  pinkbear.position.set(hitPose.transform.position.x, hitPose.transform.position.y, hitPose.transform.position.z)
-  pinkbear.updateMatrixWorld(true);
+  reticle.visible = true;
+  reticle.position.set(hitPose.transform.position.x, hitPose.transform.position.y, hitPose.transform.position.z)
+  reticle.updateMatrixWorld(true);
 }
 
     // Render the scene with THREE.WebGLRenderer.

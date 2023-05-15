@@ -84,6 +84,8 @@ const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("hhttps://github.com/quirinbatsch/testingAR/blob/47ec4b5f01e0413eeef34915ff7f56328e3ae002/scene.glb", function(gltf) {
   pinkbear = gltf.scene;
+  pinkbear.scale.set(0.01, 0.01, 0.01);
+  pinkbear.position.set(0, 0, -1);
    // Iterate over materials and change color
   //scene.scale.set(0.1, 0.1, 0.1)
   pinkbear.traverse((child) => {

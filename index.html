@@ -95,7 +95,7 @@ loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/reticle/re
 })
 
   
-  /* original code:
+// original code:
 let flower;
 loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
   flower = gltf.scene;
@@ -106,11 +106,14 @@ session.addEventListener("select", (event) => {
     const clone = flower.clone();
     clone.position.copy(reticle.position);
     scene.add(clone);
+    session.removeEventListener("select", (event));
+    reticle.visible = false;
+    hitTestSource.cancel();
   }
 });
 
-  */
   
+  /*
   //chatGPT code:
   
   let flower;
@@ -133,7 +136,7 @@ function placeFlower() {
 
 //session.addEventListener("select", placeFlower);
  
-
+*/
   
   /*
   

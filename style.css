@@ -215,7 +215,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 400px) {
   .glowing-btn{
     font-size: 1em;
   }

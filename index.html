@@ -99,59 +99,13 @@ loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/reticle/re
   reticle.visible = false;
   scene.add(reticle);
 })
+  
 
   
-// original code:
-let flower;
-loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
-  flower = gltf.scene;
-});
-
-session.addEventListener("select", (event) => {
-  if (flower) {
-    const clone = flower.clone();
-    clone.position.copy(reticle.position);
-    scene.add(clone);
-    session.removeEventListener("select", (event));
-    reticle.visible = false;
-    hitTestSource.cancel();
-  }
-});
-
   
-  /*
-  //chatGPT code:
-  
-  let flower;
-loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
-  flower = gltf.scene;
-});
-  
-session.addEventListener("select", placeFlower);
-
-function placeFlower() {
-  if (flower) {
-    const clone = flower.clone();
-    clone.position.copy(reticle.position);
-    scene.add(clone);
-    session.removeEventListener("select", placeFlower);
-    reticle.visible = false;
-    hitTestSource.cancel();
-  }
-}
-
-//session.addEventListener("select", placeFlower);
- 
-*/
-  
-  /*
-  
-  
-const loader = new THREE.GLTFLoader();
 let pinkbear;
 loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkbear-neu.gltf", function(gltf) {
   pinkbear = gltf.scene;
-  pinkbear.visible = false
   pinkbear.scale.set(0.3*pinkbear.scale.x, 0.3*pinkbear.scale.y, 0.3*pinkbear.scale.z)
   //pinkbear.scale.set(0.5, 0.5, 0.5);
   pinkbear.position.set(0, 0, 0);
@@ -166,11 +120,35 @@ loader.load("https://raw.githubusercontent.com/quirinbatsch/testingAR/main/pinkb
     }
   });
     
-  
+/*
+
   scene.add(pinkbear);
 });
 
 */
+
+  
+/*// original code:
+let flower;
+loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
+  flower = gltf.scene;
+});
+
+*/
+
+session.addEventListener("select", (event) => {
+  if (pinkbear) {
+    const clone = pinkbear.clone();
+    clone.position.copy(reticle.position);
+    scene.add(clone);
+    //session.removeEventListener("select", (event));
+    //reticle.visible = false;
+    //hitTestSource.cancel();
+  }
+});
+
+  
+
   
 // Create a render loop that allows us to draw on the AR view.
 const onXRFrame = (time, frame) => {

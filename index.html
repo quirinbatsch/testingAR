@@ -119,8 +119,8 @@ function placeFlower() {
     const clone = flower.clone();
     clone.position.copy(reticle.position);
     scene.add(clone);
-    session.removeEventListener("select", placeFlower);
     reticle.visible = false;
+    session.removeEventListener("select", placeFlower);
   }
 }
 
